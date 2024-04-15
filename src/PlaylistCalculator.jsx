@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,15 +6,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const PlaylistCalculator = () => {
   const [playlistLink, setPlaylistLink] = useState('');
   const [startVideoNumber, setStartVideoNumber] = useState(1);
-  const [endVideoNumber, setEndVideoNumber] = useState(null);
+  const [endVideoNumber, setEndVideoNumber] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
   const [playlistData, setPlaylistData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [now, setNow] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [playlistId, setPlaylistId] = useState('');
-  // const [totalTimeInSeconds, setTotalTimeInSeconds] = useState(0);
-  
+  const [nextPageToken,setNextPageToken]=useState('');
+
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
@@ -24,7 +24,8 @@ const PlaylistCalculator = () => {
     setPlaylistId(extractPlaylistId(playlistLink));
 
     // Fetch playlist data using YouTube Data API
-    await fetchPlaylistData(playlistId);
+    await fetchPlaylistData(playlistId,endVideoNumber);
+    console.log(playlistData);
     setTimeout(() => {  
       calculateTotalLength(startVideoNumber, endVideoNumber);
     }, 1000);
@@ -38,17 +39,40 @@ const PlaylistCalculator = () => {
     return url.searchParams.get('list');
   };
 
-  // Function to fetch playlist data from YouTube Data API
-  const fetchPlaylistData = async (playlistId) => {
+
+  const fetchPlaylistData = async (playlistId, endVideoNumber) => {
     try {
-      const response = await axios.get(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId=${playlistId}&key=${process.env.REACT_APP_API_KEY}`
-      );
-      setPlaylistData(response.data.items);
+      setPlaylistData(null);  
+      let pageNumber = 0;
+      let nextPageToken = '';  // Initialize nextPageToken
+      let fetchedItemsCount = 0; // Keep track of fetched items
+
+      while (fetchedItemsCount < endVideoNumber) {
+        // Construct the URL with conditional pageToken
+        const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId=${playlistId}&key=${process.env.REACT_APP_API_KEY}${nextPageToken ? '&pageToken=' + nextPageToken : ''}`;
+        
+        const response = await axios.get(url);
+        console.log(response.data.items);
+
+        // Check if items are there
+        if (response.data.items) {
+          setPlaylistData(prevData => [...prevData || [], ...response.data.items]);
+          fetchedItemsCount += response.data.items.length; // Update fetched items count
+        }
+
+        if (!response.data.nextPageToken || fetchedItemsCount >= endVideoNumber) {
+          console.log(playlistData)
+          break;  // Exit if no more tokens or reached the desired number
+        }
+
+        nextPageToken = response.data.nextPageToken; // Update the token for the next request
+        pageNumber++;
+        console.log(`Page number: ${pageNumber}, Fetched items: ${fetchedItemsCount}`);
+      }
     } catch (error) {
       console.error('Failed to fetch playlist data:', error);
     }
-  };
+};
 
   // Function to calculate total length of the playlist from start to end video numbers
   const calculateTotalLength = async (start, end) => {
@@ -58,28 +82,27 @@ const PlaylistCalculator = () => {
     }
 
     let totalTimeInSeconds = 0;
-
-    // Adjust end video number if not provided
-    const adjustedEnd = end ? end : playlistData.length;
+;
 
     setLoading(true);
     // Iterate through the playlist data and calculate total time
     let i;
-    for (i = 0; i < adjustedEnd - start + 1; i++) {
+    for (i = start-1; i < end; i++) {
       const videoData = playlistData[i];
       const videoId = videoData.contentDetails.videoId;
-
+      
       if (videoData && videoData.contentDetails && videoData.contentDetails.videoId) {
         const durationInSeconds = await fetchVideoDuration(videoId);
+        console.log(i,videoId,durationInSeconds);
        totalTimeInSeconds += durationInSeconds;
        setTotalTime(totalTimeInSeconds);
-        setNow((i + 1) / (adjustedEnd - start + 1) * 100);
+        setNow((i + 1) / (end - start + 1) * 100);
       } else {
         console.error(`Content details or video ID is undefined for video at index ${i}.`);
       }
     }
 
-    if (adjustedEnd - start + 1 === i) {
+    if (end == i) {
       setNow(0);
       setLoading(false);
     }
@@ -98,6 +121,7 @@ const PlaylistCalculator = () => {
       );
 
       if (response.data.items.length > 0) {
+        console.log(response.data);
         const duration = response.data.items[0].contentDetails.duration;
 
         // Convert ISO 8601 duration to seconds
