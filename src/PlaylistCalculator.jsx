@@ -150,7 +150,7 @@ const fetchVideoDuration = async (videoId) => {
   
   return (
     <div className="w-[90vw] max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">YouTube Playlist Calculator</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">YouTube Playlist Length Calculator</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block font-bold mb-2 text-gray-700">YouTube Playlist Link:</label>
