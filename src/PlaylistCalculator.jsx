@@ -25,7 +25,7 @@ const PlaylistCalculator = () => {
 
     // Fetch playlist data using YouTube Data API
     await fetchPlaylistData(playlistId,endVideoNumber);
-    console.log(playlistData);
+    // console.log(playlistData);
     setTimeout(() => {  
       calculateTotalLength(startVideoNumber, endVideoNumber);
     }, 1000);
@@ -52,7 +52,7 @@ const PlaylistCalculator = () => {
         const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId=${playlistId}&key=${process.env.REACT_APP_API_KEY}${nextPageToken ? '&pageToken=' + nextPageToken : ''}`;
         
         const response = await axios.get(url);
-        console.log(response.data.items);
+        // console.log(response.data.items);
 
         // Check if items are there
         if (response.data.items) {
@@ -61,13 +61,13 @@ const PlaylistCalculator = () => {
         }
 
         if (!response.data.nextPageToken || fetchedItemsCount >= endVideoNumber) {
-          console.log(playlistData)
+          // console.log(playlistData)
           break;  // Exit if no more tokens or reached the desired number
         }
 
         nextPageToken = response.data.nextPageToken; // Update the token for the next request
         pageNumber++;
-        console.log(`Page number: ${pageNumber}, Fetched items: ${fetchedItemsCount}`);
+        // console.log(`Page number: ${pageNumber}, Fetched items: ${fetchedItemsCount}`);
       }
     } catch (error) {
       console.error('Failed to fetch playlist data:', error);
@@ -93,7 +93,7 @@ const PlaylistCalculator = () => {
       
       if (videoData && videoData.contentDetails && videoData.contentDetails.videoId) {
         const durationInSeconds = await fetchVideoDuration(videoId);
-        console.log(i,videoId,durationInSeconds);
+        // console.log(i,videoId,durationInSeconds);
        totalTimeInSeconds += durationInSeconds;
        setTotalTime(totalTimeInSeconds);
         setNow((i + 1) / (end - start + 1) * 100);
@@ -121,7 +121,7 @@ const PlaylistCalculator = () => {
       );
 
       if (response.data.items.length > 0) {
-        console.log(response.data);
+        // console.log(response.data);
         const duration = response.data.items[0].contentDetails.duration;
 
         // Convert ISO 8601 duration to seconds
