@@ -21,7 +21,7 @@ const PlaylistCalculator = () => {
     event.preventDefault();
 
     // Extract the playlist ID from the provided link
-    // setPlaylistId(extractPlaylistId(playlistLink));
+    setPlaylistId(extractPlaylistId(playlistLink));
 
     // Fetch playlist data using YouTube Data API
     await fetchPlaylistData(playlistId);
