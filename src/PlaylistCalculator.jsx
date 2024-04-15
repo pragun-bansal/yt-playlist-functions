@@ -197,7 +197,7 @@ const PlaylistCalculator = () => {
           <h3 className="text-xl font-semibold text-gray-800">Total Length of the Playlist: {totalLength}</h3>
             <div className="mt-4">
               <h4 className="text-lg font-medium text-black">Time taken at different speeds:</h4>
-              <ul className='text-black'>
+              <ul className='text-black text-lg'>
                 <li>At 1.25x speed: {calculateTimeAtSpeed(totalTime, 1.25)}</li>
                 <li>At 1.5x speed: {calculateTimeAtSpeed(totalTime, 1.5)}</li>
                 <li>At 2x speed: {calculateTimeAtSpeed(totalTime, 2)}</li>
