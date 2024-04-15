@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+<!-- # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -68,4 +68,74 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# yt-playlist-length-calculator
+# yt-playlist-length-calculator -->
+
+# YouTube Playlist Length Calculator
+
+This project is a React application that calculates the total length of a YouTube playlist based on a given range of video numbers. Users can input a YouTube playlist link and specify the start and end video numbers to calculate the total duration of the selected range of videos.
+
+## Features
+
+- Input a YouTube playlist link, start video number, and end video number.
+- Calculate the total length of the playlist from the specified start to end video numbers.
+- Display the total length in a human-readable format (HH:MM:SS).
+- Progress bar showing the calculation progress.
+- Tailwind CSS and Bootstrap for a modern and responsive user interface.
+
+## Installation
+
+1. Clone the repository:
+
+    ```shell
+    git clone https://github.com/pragun-bansal/yt-playlist-length-calculator
+    ```
+
+2. Navigate to the project directory:
+
+    ```shell
+    cd yt-playlist-length-calculator
+    ```
+
+3. Install the dependencies:
+
+    ```shell
+    npm install
+    ```
+
+4. Obtain a YouTube Data API key from the [Google Developers Console](https://console.developers.google.com/).
+
+5. Create a `.env` file in the project root and add your API key:
+
+    ```plaintext
+    REACT_APP_API_KEY=your_api_key
+    ```
+
+## Usage
+
+1. Start the development server:
+
+    ```shell
+    npm start
+    ```
+
+2. Open your web browser and navigate to `http://localhost:3000`.
+
+3. Input the YouTube playlist link, start video number, and end video number in the form provided.
+
+4. Click "Calculate Total Length" to calculate the total duration of the specified range of videos in the playlist.
+
+5. The application will display the total length of the playlist range in a human-readable format.
+
+## Dependencies
+
+- [React](https://reactjs.org/)
+- [axios](https://axios-http.com/)
+- [Bootstrap](https://getbootstrap.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [react-bootstrap](https://react-bootstrap.github.io/)
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request if you have any improvements, bug fixes, or new features to add.
+
+
