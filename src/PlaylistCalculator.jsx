@@ -80,7 +80,7 @@ const PlaylistCalculator = () => {
         }
         if (fetchedItemsCount >= endVideoNumber) {
           // console.log(playlistData)
-          return; // Exit if no more tokens or reached the desired number
+          break; // Exit if no more tokens or reached the desired number
         }
         if (!response.data.nextPageToken && pageNumber > 0) {
           toast.error('Videos not found, Range is incorrect', {
@@ -93,13 +93,14 @@ const PlaylistCalculator = () => {
             progress: undefined,
             theme: 'dark',
           });
-          return;
+          break;
         }
 
         nextPageToken = response.data.nextPageToken; // Update the token for the next request
         pageNumber++;
         // console.log(`Page number: ${pageNumber}, Fetched items: ${fetchedItemsCount}`);
       }
+      console.log("fetching vids")
       calculateTotalLength(startVideoNumber, endVideoNumber);
     } catch (error) {
       toast.error('Failed to fetch playlist Data', {
