@@ -17,15 +17,19 @@ const PlaylistCalculator = () => {
   const [nextPageToken, setNextPageToken] = useState('');
 
   // Function to handle form submission
+
+useEffect(() => {
+  setPlaylistId(extractPlaylistId(playlistLink));
+}, [playlistLink,playlistId]);
+
+
+
   const handleSubmit = async event => {
     event.preventDefault();
     try {
-      // Extract the playlist ID from the provided link
-      setPlaylistId(extractPlaylistId(playlistLink));
-
       // Fetch playlist data using YouTube Data API
-
       await fetchPlaylistData(playlistId, endVideoNumber);
+
       // console.log(playlistData);
 
       // setTimeout(() => {
@@ -45,7 +49,7 @@ const PlaylistCalculator = () => {
     } catch (error) {
       toast.error('Invalid Playlist Link', {
         position: 'top-center',
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -72,7 +76,9 @@ const PlaylistCalculator = () => {
 
         const response = await axios.get(url);
         // console.log(response.data.items);
-
+        setTimeout(() => {  
+          console.log(response.data.items);
+        }, 1000);
         // Check if items are there
         if (response.data.items) {
           setPlaylistData(prevData => [...(prevData || []), ...response.data.items]);
