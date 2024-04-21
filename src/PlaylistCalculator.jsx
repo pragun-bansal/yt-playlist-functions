@@ -18,9 +18,9 @@ const PlaylistCalculator = () => {
 
   // Function to handle form submission
 
-useEffect(() => {
-  setPlaylistId(extractPlaylistId(playlistLink));
-}, [playlistLink,playlistId]);
+// useEffect(() => {
+//   setPlaylistId(extractPlaylistId(playlistLink));
+// }, [playlistLink,playlistId]);
 
 
 
@@ -43,6 +43,7 @@ useEffect(() => {
 
   // Function to extract playlist ID from playlist link
   const extractPlaylistId = link => {
+    if(link.length === 0) return;
     try {
       const url = new URL(link);
       return url.searchParams.get('list');
@@ -67,7 +68,6 @@ useEffect(() => {
       let pageNumber = 0;
       let nextPageToken = ''; // Initialize nextPageToken
       let fetchedItemsCount = 0; // Keep track of fetched items
-
       while (fetchedItemsCount < endVideoNumber) {
         // Construct the URL with conditional pageToken
         const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId=${playlistId}&key=${
@@ -107,7 +107,13 @@ useEffect(() => {
         // console.log(`Page number: ${pageNumber}, Fetched items: ${fetchedItemsCount}`);
       }
       console.log("fetching vids")
+      if(!playlistData){
+      setTimeout(() => {
       calculateTotalLength(startVideoNumber, endVideoNumber);
+      }, 3000);}
+      else{
+        calculateTotalLength(startVideoNumber, endVideoNumber);
+      }
     } catch (error) {
       toast.error('Failed to fetch playlist Data', {
         position: 'top-center',
@@ -231,6 +237,7 @@ useEffect(() => {
             value={playlistLink}
             onChange={e => {
               setPlaylistLink(e.target.value);
+              setPlaylistId(extractPlaylistId(e.target.value));
             }}
             required
             className="w-full p-2 border text-white bg-transparent border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-red-500"
