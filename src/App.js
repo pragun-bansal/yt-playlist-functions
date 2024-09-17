@@ -1,29 +1,38 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
-import PlaylistCalculator from './PlaylistCalculator';
-import { ToastContainer, toast } from 'react-toastify';
+import DownloadPlaylist from './Pages/DownloadPlayList';
+import PlaylistCalculator from './Pages/PlaylistCalculator';
+import HomePage from './Pages/HomePage';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  return (
-    <div className="App ">
-      <header className="App-header  bg-gradient-to-r from-indigo-400 to-cyan-400">
-      <ToastContainer
-position="top-center"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-/>
-        <PlaylistCalculator />
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <div className="App bg-gradient-to-r from-indigo-400 to-cyan-400 h-[100vh] flex justify-center items-center">
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
+                <main>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/download" element={<DownloadPlaylist />} />
+                        <Route path="/calculator" element={<PlaylistCalculator />} />
+                    </Routes>
+                </main>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
